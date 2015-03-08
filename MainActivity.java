@@ -39,7 +39,6 @@ public class MainActivity extends ActionBarActivity
         mViewPager.setAdapter(viewPagerAdapter);
 
         Log.i(TAG, "after nav");
-
     }
 
     @Override

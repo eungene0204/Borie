@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import siva.borie.R;
 
 /**
@@ -19,6 +18,13 @@ public class RecommendedServiceFragment extends Fragment
     {
         View root = inflater.inflate(R.layout.fragment_recommended_service, container,false );
 
+        getList();
+
         return root;
+    }
+
+    private void getList()
+    {
+
     }
 }

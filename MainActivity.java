@@ -45,6 +45,7 @@ public class MainActivity extends ActionBarActivity
     protected void onStart()
     {
         super.onStart();
+
     }
 
     @Override

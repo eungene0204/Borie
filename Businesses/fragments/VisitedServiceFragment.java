@@ -1,4 +1,4 @@
-package siva.borie.service.fragment;
+package siva.borie.Businesses.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

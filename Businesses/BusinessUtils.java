@@ -5,9 +5,8 @@ package siva.borie.Businesses;
  */
 public class BusinessUtils
 {
-    public static final String BIZ_NAME = "biz_name";
-    public static final String BIZ_ADDRESS = "biz_address";
-
-    public static final String OWNER_EMAIL = "owner_email";
+    public static final String BIZ_NAME = "borie_biz_name";
+    public static final String BIZ_ADDRESS = "borie_address";
+    public static final String OWNER_EMAIL = "borie_email";
 
 }

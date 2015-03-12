@@ -58,13 +58,16 @@ public class RecommendedServiceFragment extends Fragment
 
     private void setListRequest()
     {
-        Log.d(TAG, "getList");
+        Log.d(TAG, "setListRequest");
         JsonArrayRequest req = new JsonArrayRequest(URL, new Response.Listener<JSONArray>()
         {
             @Override
             public void onResponse(JSONArray jsonArray)
             {
-                Log.d(TAG, jsonArray.toString());
+                Log.d(TAG, "onResponse");
+
+
+                Log.d(TAG, "json result: " + jsonArray.toString());
 
                 getResponse(jsonArray);
                 mAdapter.notifyDataSetChanged();
@@ -85,8 +88,9 @@ public class RecommendedServiceFragment extends Fragment
 
     private void getResponse(JSONArray _jsonArray)
     {
-       JSONArray jsonArray = _jsonArray;
-       int lenght = jsonArray.length();
+        JSONArray jsonArray = _jsonArray;
+
+        int lenght = jsonArray.length();
 
        for(int i = 0; i < lenght; ++i)
        {
@@ -104,7 +108,6 @@ public class RecommendedServiceFragment extends Fragment
 
            } catch (JSONException e)
            {
-
                Log.d(TAG, e.toString());
            }
        }

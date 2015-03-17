@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import siva.borie.Businesses.Business;
 import siva.borie.Businesses.BusinessUtils;
 import siva.borie.R;
+import siva.borie.location.geofence.Entry;
+import siva.borie.location.geofence.GeonfenceController;
 import siva.borie.network.NetworkController;
 
 /**
@@ -39,7 +41,7 @@ public class RecommendedServiceFragment extends Fragment
     private ListView mListView;
     private ListViewAdapter mAdapter;
     private ArrayList<Business> mBusinessArrayList;
-
+    private GeonfenceController mGeofenceController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
@@ -50,6 +52,14 @@ public class RecommendedServiceFragment extends Fragment
         mBusinessArrayList = new ArrayList<Business>();
         mAdapter = new ListViewAdapter(getActivity(), -1);
         mListView.setAdapter(mAdapter);
+
+        //Geofence Test remove after test
+        Context context = getActivity().getApplicationContext();
+        mGeofenceController = new GeonfenceController(getActivity().getApplicationContext());
+
+        Entry amsa = new Entry(37.550365, 127.127471);
+        mGeofenceController.addGeofenceObjectToList(amsa);
+
 
         setListRequest();
 
@@ -82,7 +92,8 @@ public class RecommendedServiceFragment extends Fragment
             }
         });
 
-        NetworkController.getInstance(getActivity().getApplicationContext()).addToRequestQueue(req);
+        NetworkController.getInstance(getActivity().getApplicationContext())
+                .addToRequestQueue(req);
 
     }
 

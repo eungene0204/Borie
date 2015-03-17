@@ -7,22 +7,43 @@ import android.content.Intent;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+
+import siva.borie.GoogleApi.GoogleApiHelper;
 
 /**
  * Created by Eungjun on 2015-03-13.
  */
 public class GeonfenceController
 {
+    private final Context mContext;
     private final ArrayList<Geofence> mGeofenceList;
     private final GoogleApiClient mGoogleApiClient;
+    private GoogleApiClientConnectionListener mGoogleApiClientListener =
+            new GoogleApiClientConnectionListener();
+    private GeofenceResultListener mGeofenceResultListener =
+            new GeofenceResultListener();
 
-    public GeonfenceController()
+
+    public GeonfenceController(Context context)
     {
-        //Need helper class here
-        this.mGoogleApiClient =  ;
+        this.mContext = context;
+        this.mGoogleApiClient = GoogleApiHelper.getGoogleApiClient(mContext,mGoogleApiClientListener,
+                mGoogleApiClientListener, LocationServices.API);
+
         mGeofenceList = new ArrayList<Geofence>();
+
+    }
+
+    public void addGeofences()
+    {
+        LocationServices.GeofencingApi.addGeofences(
+                mGoogleApiClient,
+                getGeofencingRequest(),
+                getGeofencePendingIntent(mContext)
+        ).setResultCallback(mGeofenceResultListener);
     }
 
     public void addGeofenceObjectToList(final Entry entry)
@@ -37,7 +58,6 @@ public class GeonfenceController
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());
-
     }
 
     private GeofencingRequest getGeofencingRequest()
@@ -59,10 +79,21 @@ public class GeonfenceController
 
         Intent intent = new Intent(context, GeofenceTransitionIntentService.class);
 
-        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
+    public void stopGeofence()
+    {
+        LocationServices.GeofencingApi.removeGeofences(
+               mGoogleApiClient,
+                getGeofencePendingIntent(mContext)
+        ).setResultCallback(mGeofenceResultListener);
+    }
 
+    public void connectionResult()
+    {
 
+    }
 
 }

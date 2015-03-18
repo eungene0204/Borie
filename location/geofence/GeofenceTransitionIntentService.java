@@ -123,7 +123,6 @@ public class GeofenceTransitionIntentService extends IntentService
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(0, builder.build());
-
     }
 
     private String getTransitionString(int transitionType)

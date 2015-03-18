@@ -13,11 +13,13 @@ public class Entry
     private static final String PRE_KEY = "SIVA_BORIE";
     private static SecureRandom RANDOM;
     private final LatLng mLocation;
+    private final String mName;
 
-    public Entry(final double lat, final double lng)
+    public Entry(final double lat, final double lng, final String name )
     {
         RANDOM = new SecureRandom();
         mLocation = new LatLng(lat,lng);
+        mName = name;
     }
 
     public LatLng getLocation()
@@ -29,7 +31,7 @@ public class Entry
     {
         String key = new BigInteger(130,RANDOM).toString(32);
 
-        return PRE_KEY + key;
+        return PRE_KEY + "_" + mName;
     }
 
 

@@ -36,6 +36,8 @@ public class GeofenceTransitionIntentService extends IntentService
     @Override
     protected void onHandleIntent(Intent intent)
     {
+        Log.i(TAG, "Geofence onHandle");
+
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if(geofencingEvent.hasError())
@@ -54,9 +56,23 @@ public class GeofenceTransitionIntentService extends IntentService
         {
             List triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
-            //String geoTransitionDetails = geofencingEvent.get
+            String geoTransitionDetails = getGeofenceTransitionDetails(
+                    this,
+                    geofenceTransition,
+                    triggeringGeofences
+            );
+           sendNotification(geoTransitionDetails);
+
+            Log.i(TAG, geoTransitionDetails);
         }
+        else
+        {
+            Log.e(TAG, "Geofence Invalid transition type");
+        }
+
     }
+
+    private String mTriggeringGeofencesIdsString;
 
     private String getGeofenceTransitionDetails(Context context, int geofenceTransition,
                                                 List<Geofence> triggeringGeofences)
@@ -70,10 +86,10 @@ public class GeofenceTransitionIntentService extends IntentService
             triggeringGeofencesIdList.add(geofece.getRequestId());
         }
 
-        String triggeringGeofencesIdsString = TextUtils.join(", ",
+        mTriggeringGeofencesIdsString = TextUtils.join(", ",
                 triggeringGeofencesIdList);
 
-        return geofenceTransitionString + ": " + triggeringGeofencesIdsString;
+        return geofenceTransitionString + ": " + mTriggeringGeofencesIdsString;
 
     }
 
@@ -98,13 +114,15 @@ public class GeofenceTransitionIntentService extends IntentService
                         R.drawable.ic_launcher))
                 .setColor(Color.RED)
                 .setContentTitle(notificationDetails)
-                .setContentText(getString(R.string.geofence_transition_notification_text))
+                .setContentText(mTriggeringGeofencesIdsString) //getString(R.string.geofence_transition_notification_text))
                 .setContentIntent(notificationPendingIntent);
 
         builder.setAutoCancel(true);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0, builder.build());
 
     }
 

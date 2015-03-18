@@ -3,8 +3,13 @@ package siva.borie.location.geofence;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
@@ -16,34 +21,54 @@ import siva.borie.GoogleApi.GoogleApiHelper;
 /**
  * Created by Eungjun on 2015-03-13.
  */
-public class GeonfenceController
+public class GeonfenceController implements GoogleApiClient.ConnectionCallbacks, ResultCallback<Status>, GoogleApiClient.OnConnectionFailedListener
 {
+    public static final String TAG = GeonfenceController.class.getSimpleName();
+
     private final Context mContext;
     private final ArrayList<Geofence> mGeofenceList;
     private final GoogleApiClient mGoogleApiClient;
-    private GoogleApiClientConnectionListener mGoogleApiClientListener =
-            new GoogleApiClientConnectionListener();
-    private GeofenceResultListener mGeofenceResultListener =
-            new GeofenceResultListener();
-
 
     public GeonfenceController(Context context)
     {
         this.mContext = context;
-        this.mGoogleApiClient = GoogleApiHelper.getGoogleApiClient(mContext,mGoogleApiClientListener,
-                mGoogleApiClientListener, LocationServices.API);
+        this.mGoogleApiClient = GoogleApiHelper.getGoogleApiClient(mContext,this,
+                this, LocationServices.API);
 
         mGeofenceList = new ArrayList<Geofence>();
 
     }
 
+    public void startGoogleApiClient()
+    {
+        mGoogleApiClient.connect();
+    }
+
+    public void stopGoogleApiClient()
+    {
+        mGoogleApiClient.disconnect();
+    }
+
     public void addGeofences()
     {
-        LocationServices.GeofencingApi.addGeofences(
-                mGoogleApiClient,
-                getGeofencingRequest(),
-                getGeofencePendingIntent(mContext)
-        ).setResultCallback(mGeofenceResultListener);
+        if(!mGoogleApiClient.isConnected())
+        {
+            Log.i(TAG, "mGoogleApiClient is not connected");
+            return;
+        }
+
+        try
+        {
+            LocationServices.GeofencingApi.addGeofences(
+                    mGoogleApiClient,
+                    getGeofencingRequest(),
+                    getGeofencePendingIntent(mContext)
+            ).setResultCallback(this);
+        }
+        catch(SecurityException e)
+        {
+            Log.e(TAG, e.toString());
+        }
     }
 
     public void addGeofenceObjectToList(final Entry entry)
@@ -83,17 +108,52 @@ public class GeonfenceController
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
-    public void stopGeofence()
+    public void stopGeofences()
     {
+
+        if(!mGoogleApiClient.isConnected())
+        {
+            Log.i(TAG, "mGoogleApiClient is not connected");
+            return;
+        }
+
         LocationServices.GeofencingApi.removeGeofences(
                mGoogleApiClient,
                 getGeofencePendingIntent(mContext)
-        ).setResultCallback(mGeofenceResultListener);
+        ).setResultCallback(this);
     }
 
-    public void connectionResult()
+
+    @Override
+    public void onConnected(Bundle bundle)
+    {
+        Log.i(TAG, "GoogleApiClient Conntected");
+
+        Entry amsa = new Entry(37.550365, 127.127471, "Amsa");
+        addGeofenceObjectToList(amsa);
+        addGeofences();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i)
     {
 
+        Log.i(TAG, "GoogleApiClient Suspended");
+        startGoogleApiClient();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult)
+    {
+        Log.i(TAG, "GoogleApiClient failed");
+        Log.i(TAG, connectionResult.toString());
+    }
+
+    //Geofence Add/remove result
+    @Override
+    public void onResult(Status status)
+    {
+        Log.i(TAG, "Geofence result: " + status.getStatus().toString());
     }
 
 }

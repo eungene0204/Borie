@@ -6,7 +6,7 @@ package siva.borie.location.geofence;
 public class GeofenceConstans
 {
     public static final int GEOFENCE_MIN_RADIUS_IN_METERS = 100;
-    public static final int GEOFENCE_RADIUS_IN_METERS = 2000;
+    public static final int GEOFENCE_RADIUS_IN_METERS = 100;
 
     private GeofenceConstans() { }
 }

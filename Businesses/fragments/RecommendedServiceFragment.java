@@ -1,5 +1,6 @@
 package siva.borie.Businesses.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import siva.borie.Businesses.Business;
 import siva.borie.Businesses.BusinessUtils;
 import siva.borie.R;
-import siva.borie.location.geofence.Entry;
 import siva.borie.location.geofence.GeonfenceController;
 import siva.borie.network.NetworkController;
 
@@ -46,6 +46,8 @@ public class RecommendedServiceFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+        Log.i(TAG, "onCreateView");
+
         View root = inflater.inflate(R.layout.fragment_recommended_service, container,false );
 
         mListView = (ListView) root.findViewById(R.id.recommended_service_listview);
@@ -53,17 +55,39 @@ public class RecommendedServiceFragment extends Fragment
         mAdapter = new ListViewAdapter(getActivity(), -1);
         mListView.setAdapter(mAdapter);
 
-        //Geofence Test remove after test
-        Context context = getActivity().getApplicationContext();
-        mGeofenceController = new GeonfenceController(getActivity().getApplicationContext());
-
-        Entry amsa = new Entry(37.550365, 127.127471);
-        mGeofenceController.addGeofenceObjectToList(amsa);
-
 
         setListRequest();
 
         return root;
+    }
+
+    @Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+
+        Log.i(TAG, "onAttach" );
+
+        //Geofence Test remove after test
+        Context context = activity.getApplicationContext();
+        mGeofenceController = new GeonfenceController(getActivity().getApplicationContext());
+
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        mGeofenceController.stopGeofences();
+        mGeofenceController.startGoogleApiClient();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        mGeofenceController.stopGoogleApiClient();
+        mGeofenceController.stopGeofences();
     }
 
     private void setListRequest()

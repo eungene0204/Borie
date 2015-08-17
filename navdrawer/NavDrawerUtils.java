@@ -9,7 +9,7 @@ public class NavDrawerUtils
     {
         USER_INFO,
         ITEM,
-        SUB_HEADER
+        TITLE
     }
 
     public enum ItemId
@@ -21,8 +21,7 @@ public class NavDrawerUtils
         SETTING,
         FEED_BACK,
         SHARE,
-        SUB_HEADER,
-        EMPTY
+        TITLE
     }
 
 

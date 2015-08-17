@@ -4,16 +4,13 @@ package siva.borie.navdrawer;
  * Created by Eungjun on 2015-02-16.
  */
 
-import android.graphics.Bitmap;
-
-import siva.borie.navdrawer.NavDrawerUtils.ItemId;
 import siva.borie.navdrawer.NavDrawerUtils.ItemType;
+import siva.borie.navdrawer.NavDrawerUtils.ItemId;
 
 public class NavDrawerItem
 {
 
-    private String mTitle = "";
-    private Bitmap mBitmap;
+    private String mTitle;
     private NavDrawerUtils.ItemType mType;
     private NavDrawerUtils.ItemId mId;
 
@@ -28,14 +25,19 @@ public class NavDrawerItem
         this.mId = id;
     }
 
+    public void setTitle(final String title)
+    {
+        mTitle = title;
+    }
+
     public String getTitle()
     {
         return mTitle;
     }
 
-    public void setTitle(final String title)
+    public void setItemType(final ItemType type)
     {
-        mTitle = title;
+        mType = type;
     }
 
     public ItemType getItemType()
@@ -46,19 +48,14 @@ public class NavDrawerItem
         return mType;
     }
 
-    public void setItemType(final ItemType type)
+    public void setItemId(ItemId id)
     {
-        mType = type;
+        this.mId = id;
     }
 
     public ItemId getItemId()
     {
         return this.mId;
-    }
-
-    public void setItemId(ItemId id)
-    {
-        this.mId = id;
     }
 
 }

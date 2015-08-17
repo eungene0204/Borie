@@ -6,4 +6,6 @@ package siva.borie.Businesses.fragments.adapter;
 public class RecommendedLitViewAdapter
 {
 
+
+
 }

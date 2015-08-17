@@ -21,4 +21,6 @@ public class AllServiceListFragment extends Fragment
 
         return root;
     }
+
+
 }

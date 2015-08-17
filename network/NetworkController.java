@@ -1,10 +1,14 @@
 package siva.borie.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 /**
@@ -15,38 +19,56 @@ public class NetworkController
     public static final String TAG = NetworkController.class.getSimpleName();
 
     private static Context mContext;
-
+    private static NetworkController mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
-    private static NetworkController mInstance;
-
-    private NetworkController(final Context context)
+    public NetworkController(final Context context)
     {
-        this.mContext = context;
-
-        mRequestQueue = getRequestQueue();
+        mContext = context;
+        mRequestQueue = Volley.newRequestQueue(context);
     }
 
-    public static synchronized NetworkController getInstance(final Context context)
-    {
-        if (null == mInstance)
-            mInstance = new NetworkController(context);
 
-        return mInstance;
+    public StringRequest makeStringRequest(final String url)
+    {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String s)
+                    {
+                        Log.i(TAG, s);
+
+                    }
+
+                }, new Response.ErrorListener()
+        {
+            @Override
+            public void onErrorResponse(VolleyError volleyError)
+            {
+                Log.e(TAG, volleyError.toString());
+
+            }
+        }
+        );
+
+        return stringRequest;
+
     }
 
-    public RequestQueue getRequestQueue()
+    public void add(final StringRequest req)
     {
-        if(null == mRequestQueue)
-            mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
-
-        return mRequestQueue;
+        if(null != req)
+            mRequestQueue.add(req);
     }
+
+
 
     public <T> void addToRequestQueue(Request<T> req)
     {
-        getRequestQueue().add(req);
+        mRequestQueue.add(req);
+
     }
 
 }

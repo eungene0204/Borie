@@ -18,8 +18,8 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import siva.borie.MainActivity;
 import siva.borie.R;
+import siva.borie.main.MainActivity;
 
 /**
  * Created by Eungjun on 2015-03-13.
@@ -27,6 +27,7 @@ import siva.borie.R;
 public class GeofenceTransitionIntentService extends IntentService
 {
     public static final String TAG = GeofenceTransitionIntentService.class.getSimpleName();
+    private String mTriggeringGeofencesIdsString;
 
     public GeofenceTransitionIntentService()
     {
@@ -71,8 +72,6 @@ public class GeofenceTransitionIntentService extends IntentService
         }
 
     }
-
-    private String mTriggeringGeofencesIdsString;
 
     private String getGeofenceTransitionDetails(Context context, int geofenceTransition,
                                                 List<Geofence> triggeringGeofences)

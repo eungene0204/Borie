@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,6 @@ import siva.borie.Businesses.Business;
 import siva.borie.Businesses.BusinessUtils;
 import siva.borie.R;
 import siva.borie.location.geofence.GeonfenceController;
-import siva.borie.network.NetworkController;
 
 /**
  * Created by Eungjun on 2015-02-16.
@@ -50,7 +50,7 @@ public class RecommendedServiceFragment extends Fragment
 
         View root = inflater.inflate(R.layout.fragment_recommended_service, container,false );
 
-        mListView = (ListView) root.findViewById(R.id.recommended_service_listview);
+        mListView = (ListView) root.findViewById(R.id.recommended_service_recylerview);
         mBusinessArrayList = new ArrayList<Business>();
         mAdapter = new ListViewAdapter(getActivity(), -1);
         mListView.setAdapter(mAdapter);
@@ -116,8 +116,8 @@ public class RecommendedServiceFragment extends Fragment
             }
         });
 
-        NetworkController.getInstance(getActivity().getApplicationContext())
-                .addToRequestQueue(req);
+//        NetworkController.getInstance(getActivity().getApplicationContext())
+       //.addToRequestQueue(req);
 
     }
 
@@ -148,7 +148,27 @@ public class RecommendedServiceFragment extends Fragment
        }
     }
 
+    private static class ViewHolder
+    {
+        public TextView name;
+        public TextView address;
 
+    }
+
+    public class RecommendedListAdaper extends RecyclerView.Adapter<RecommendedListAdaper.V>
+    {
+
+        public static class ViewHolder extends RecyclerView.ViewHolder
+        {
+            public TextView mTextView;
+
+            public ViewHolder(TextView itemView)
+            {
+                super(itemView);
+                mTextView = itemView;
+            }
+        }
+    }
 
     private class ListViewAdapter extends ArrayAdapter
     {
@@ -202,13 +222,6 @@ public class RecommendedServiceFragment extends Fragment
 
             return convertView;
         }
-    }
-
-    private static class ViewHolder
-    {
-        public TextView name;
-        public TextView address;
-
     }
 
 }

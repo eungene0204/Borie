@@ -1,5 +1,6 @@
 package siva.borie.Businesses.fragments.adapter;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +39,14 @@ public class RecommendedLitViewAdapter extends
 
     static public class ViewHolder extends RecyclerView.ViewHolder
     {
+        CardView mCardView;
+
 
         public ViewHolder(View itemView)
         {
             super(itemView);
+            itemView.findViewById(R.)
+
         }
     }
 

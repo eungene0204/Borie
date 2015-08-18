@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import siva.borie.Businesses.Business;
+import siva.borie.R;
 
 /**
  * Created by Eungjun on 2015-08-18.
@@ -45,7 +46,8 @@ public class RecommendedLitViewAdapter extends
         public ViewHolder(View itemView)
         {
             super(itemView);
-            itemView.findViewById(R.)
+
+            mCardView = (CardView) itemView.findViewById(R.id.cardview);
 
         }
     }

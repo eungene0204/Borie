@@ -198,7 +198,6 @@ public class RecommendedServiceFragment extends Fragment
         public ListViewAdapter(Context context, int resource)
         {
             super(context, resource);
-
         }
 
         @Override

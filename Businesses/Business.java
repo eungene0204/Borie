@@ -33,7 +33,6 @@ public class Business
     {
         this.mEmail = mEmail;
 
-
     }
 
     public String getmAddress()

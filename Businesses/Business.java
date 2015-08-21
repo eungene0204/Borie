@@ -32,6 +32,8 @@ public class Business
     public void setmEmail(final String mEmail)
     {
         this.mEmail = mEmail;
+
+
     }
 
     public String getmAddress()

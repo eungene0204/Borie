@@ -2,6 +2,8 @@ package siva.borie.navdrawer;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +21,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import siva.borie.R;
+import siva.borie.facebook.FacebookHelper;
+import siva.borie.facebook.FacebookUser;
 import siva.borie.viewpager.ViewPagerAdapter;
 
 import static siva.borie.navdrawer.NavDrawerUtils.ItemId;
@@ -37,6 +41,7 @@ public class NavigationDrawer
     private final ActionBarDrawerToggle mToggle;
     private final ViewPager mViewPager;
     private final ListView mDrawerListView;
+    private NavDrawerListAdapter mAdapter;
 
     public NavigationDrawer(Activity context, ViewPager viewpager)
     {
@@ -66,7 +71,7 @@ public class NavigationDrawer
         itemList.add(userInfo);
 
         //Add Title
-        NavDrawerItem serviceTitle = new NavDrawerItem(ItemId.TITLE);
+        NavDrawerItem serviceTitle = new NavDrawerItem(ItemId.SUB_HEADER);
         serviceTitle.setTitle("Services");
         itemList.add(serviceTitle);
 
@@ -86,7 +91,7 @@ public class NavigationDrawer
         itemList.add(visitedService);
 
         //Add Tool Title
-        NavDrawerItem toolTitle= new NavDrawerItem(ItemId.TITLE);
+        NavDrawerItem toolTitle= new NavDrawerItem(ItemId.SUB_HEADER);
         toolTitle.setTitle("Tools");
         itemList.add(toolTitle);
 
@@ -105,8 +110,8 @@ public class NavigationDrawer
         share.setTitle("Share");
         itemList.add(share);
 
-        NavDrawerListAdapter adapter = new NavDrawerListAdapter(itemList, mActivity);
-        mDrawerListView.setAdapter(adapter);
+        mAdapter = new NavDrawerListAdapter(itemList, mActivity);
+        mDrawerListView.setAdapter(mAdapter);
 
     }
 
@@ -130,6 +135,14 @@ public class NavigationDrawer
 
     public void notifyDataSetChanged()
     {
+        mAdapter.notifyDataSetChanged();
+
+    }
+
+    private FacebookUser mFacebookUser;
+    public void setFacebookUser(FacebookUser user)
+    {
+        mFacebookUser = user;
 
     }
 
@@ -165,65 +178,74 @@ public class NavigationDrawer
 
 
         @Override
-        public View getView(int position, android.view.View convertView, ViewGroup parent)
+        public View getView(int position, View convertView, ViewGroup parent)
         {
-            ViewHolder viewHolder;
+            DrawerViewHolder viewHolder;
             ItemId id = mItemList.get(position).getItemId();
 
             View row = convertView;
             if (null == row)
             {
-                viewHolder = new ViewHolder();
+                viewHolder = new DrawerViewHolder();
 
                 switch (id)
                 {
                     case USER_INFO:
-                        row = View.inflate(mActivity,R.layout.drawer_item_user_info,null);
-                        viewHolder.mTextView =
-                                (TextView) row.findViewById(R.id.user_name_tv);
+                        row = View.inflate(mActivity, R.layout.drawer_item_user_info, null);
 
+                        viewHolder.mCircleImageivew =
+                                (ImageView) row.findViewById(R.id.user_info_circleimgView);
+
+                        viewHolder.mUserNameTextView =
+                                (TextView) row.findViewById(R.id.user_info_user_name_tv);
+
+                        viewHolder.mEmailTextView =
+                                (TextView) row.findViewById(R.id.user_info_user_email_tv);
+
+                        viewHolder.mArrowImageView =
+                                (ImageView) row.findViewById(R.id.user_info_arrow_img);
 
                         break;
 
-                    case TITLE:
-                        row = View.inflate(mActivity,R.layout.drawer_item_title, null);
-                        viewHolder.mTextView =
+                    case SUB_HEADER:
+                        row = View.inflate(mActivity, R.layout.drawer_item_subheader, null);
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_title);
                         break;
 
                     case LBS_SERVICE:
                         row = View.inflate(mActivity, R.layout.drawer_item_lbs_service, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_lbs_text);
                         break;
 
                     case ALL_SERVICE:
                         row = View.inflate(mActivity, R.layout.drawer_item_all_service, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_all_service_text);
                         break;
 
                     case VISITED_SERVICE:
                         row = View.inflate(mActivity, R.layout.drawer_item_visited_service, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_visited_service_text);
                         break;
 
                     case SETTING:
                         row = View.inflate(mActivity, R.layout.drawer_item_setting, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_setting_text);
                         break;
 
                     case FEED_BACK:
                         row = View.inflate(mActivity, R.layout.drawer_item_feedback, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_feedback_text);
                         break;
 
                     case SHARE:
                         row = View.inflate(mActivity, R.layout.drawer_item_share, null);
-                        viewHolder.mTextView =
+                        viewHolder.mTitleTextView =
                                 (TextView) row.findViewById(R.id.drawer_item_share_text);
                         break;
 
@@ -233,18 +255,43 @@ public class NavigationDrawer
                 }
 
                 row.setTag(viewHolder);
+            } else
+            {
+                viewHolder = (DrawerViewHolder) row.getTag();
+            }
+
+
+            viewHolder.mId = mItemList.get(position).getItemId();
+
+
+            if (ItemId.USER_INFO == id)
+            {
+                FacebookUser user = FacebookHelper.getInstance().getFacebookUserInfo();
+
+                // Need to deal this
+                if(null == user)
+                {
+                    Log.e(TAG, "User info isn empty");
+                }
+
+                Bitmap profile = user.getProfilePicure();
+                Drawable arrow = mActivity.getDrawable(R.drawable.ic_arrow_drop_down_black_48dp);
+
+                viewHolder.mCircleImageivew.setImageBitmap(profile);
+                viewHolder.mUserNameTextView.setText(user.getmName());
+                viewHolder.mEmailTextView.setText(user.getmEmail());
+                viewHolder.mArrowImageView.setImageDrawable(arrow);
+
             }
             else
             {
-                viewHolder = (ViewHolder) row.getTag();
-            }
+                if( null != viewHolder.mTitleTextView)
+                {
+                    viewHolder.mTitleTextView.setText(mItemList.get(position).getTitle());
 
-            if( null != viewHolder.mTextView)
-            {
-                viewHolder.mTextView.setText(mItemList.get(position).getTitle());
-            }
+                }
 
-            viewHolder.mId = mItemList.get(position).getItemId();
+            }
 
 
             return row;
@@ -257,7 +304,7 @@ public class NavigationDrawer
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id)
         {
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
+            DrawerViewHolder viewHolder = (DrawerViewHolder) view.getTag();
 
             ItemId itemId= viewHolder.mId;
 
@@ -284,11 +331,14 @@ public class NavigationDrawer
         }
     }
 
-    private class ViewHolder
+    private class DrawerViewHolder
     {
-        public TextView mTextView;
-        public ImageView mImageView;
+        public TextView mTitleTextView;
+        public TextView mUserNameTextView;
+        public TextView mEmailTextView;
+        public ImageView mIconImageView;
         public ImageView mCircleImageivew;
+        public ImageView mArrowImageView;
         public ItemId mId;
     }
 }

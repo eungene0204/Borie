@@ -21,7 +21,7 @@ public class NavDrawerUtils
         SETTING,
         FEED_BACK,
         SHARE,
-        TITLE
+        SUB_HEADER
     }
 
 

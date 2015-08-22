@@ -369,13 +369,8 @@ public class FacebookHelper
         return mIsLogin;
     }
 
-    public boolean isLogin()
-    {
-        mIsLogin = AccessToken.getCurrentAccessToken() != null;
 
-
-        return mIsLogin;
-    }    private FacebookAuthCallbackListener mFBAuthListener;
+    private FacebookAuthCallbackListener mFBAuthListener;
 
     public void setFacebookCallBackListener(final FacebookAuthCallbackListener listener)
     {

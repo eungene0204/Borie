@@ -49,7 +49,7 @@ public class NavigationDrawer
         mDrawerLayout = (DrawerLayout) mActivity.findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(mActivity, mDrawerLayout, R.string.app_name, R.string.app_name);
         mDrawerLayout.setDrawerListener(mToggle);
-        mDrawerListView = (ListView) mActivity.findViewById(R.id.drawer_item_listview);
+        mDrawerListView = (ListView) mActivity.findViewById(R.id.drawer_main_listview);
         mDrawerListView.setOnItemClickListener(new ItemClickListener());
 
         initAdapter();
@@ -128,6 +128,11 @@ public class NavigationDrawer
         return false;
     }
 
+    public void notifyDataSetChanged()
+    {
+
+    }
+
     //Adapter
     private class NavDrawerListAdapter extends BaseAdapter
     {
@@ -176,6 +181,8 @@ public class NavigationDrawer
                         row = View.inflate(mActivity,R.layout.drawer_item_user_info,null);
                         viewHolder.mTextView =
                                 (TextView) row.findViewById(R.id.user_name_tv);
+
+
                         break;
 
                     case TITLE:
@@ -281,6 +288,7 @@ public class NavigationDrawer
     {
         public TextView mTextView;
         public ImageView mImageView;
+        public ImageView mCircleImageivew;
         public ItemId mId;
     }
 }

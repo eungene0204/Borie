@@ -1,26 +1,19 @@
 package siva.borie.main;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.AccessToken;
 import com.facebook.appevents.AppEventsLogger;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import siva.borie.R;
 import siva.borie.auth.LoginActivity;
@@ -30,7 +23,7 @@ import siva.borie.navdrawer.NavigationDrawer;
 import siva.borie.viewpager.ViewPagerAdapter;
 
 
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends AppCompatActivity implements
         FacebookHelper.FacebookAuthCallbackListener
 {
 
@@ -67,9 +60,6 @@ public class MainActivity extends ActionBarActivity implements
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(viewPagerAdapter);
 
-        //Print Facebook Hash key
-        printFacebookHashKey();
-
         //Facebook stuff
         FacebookHelper.getInstance().setFacebookCallBackListener(this);
         FacebookHelper.getInstance().addReadPermissions(this);
@@ -78,27 +68,6 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
-
-    private void printFacebookHashKey()
-    {
-        try
-        {
-            PackageInfo info = getPackageManager().getPackageInfo("siva.borie"
-                    , PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.i(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e)
-        {
-            e.printStackTrace();
-
-        } catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     protected void onStart()
@@ -160,6 +129,7 @@ public class MainActivity extends ActionBarActivity implements
         mDrawerToggle.onConfigurationChanged(newConfig);
 
         Log.i(TAG, "onConfigurationChanged");
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package siva.borie.Businesses;
+package siva.borie.business;
 
 /**
  * Created by Eungjun on 2015-03-12.

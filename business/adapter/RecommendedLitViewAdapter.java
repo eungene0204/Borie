@@ -1,4 +1,4 @@
-package siva.borie.Businesses.fragments.adapter;
+package siva.borie.business.adapter;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import siva.borie.Businesses.Business;
+import siva.borie.business.Business;
 import siva.borie.R;
 
 /**

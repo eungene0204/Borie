@@ -3,10 +3,14 @@ package siva.borie.facebook;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -29,6 +33,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
@@ -264,10 +270,19 @@ public class FacebookHelper
      */
     public void addReadPermissions(final Activity activity)
     {
-        //First parameter can be fragment. need to change
-        LoginManager.getInstance().
-                logInWithReadPermissions( activity,
-                        Arrays.asList("user_posts, email, public_profile"));
+        try
+        {
+            //First parameter can be fragment. need to change
+            LoginManager.getInstance().
+                    logInWithReadPermissions(activity,
+                            Arrays.asList("user_posts, email, public_profile"));
+
+            Log.i(TAG, "addReadPermissions");
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, e.toString());
+        }
     }
 
     private CallbackManager mCallBackManager;
@@ -368,6 +383,29 @@ public class FacebookHelper
 
         return mIsLogin;
     }
+
+
+    public void printFacebookHashKey(final Activity activity)
+    {
+        try
+        {
+            PackageInfo info = activity.getPackageManager().getPackageInfo("siva.borie"
+                    , PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.i(TAG, Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e)
+        {
+            e.printStackTrace();
+
+        } catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private FacebookAuthCallbackListener mFBAuthListener;

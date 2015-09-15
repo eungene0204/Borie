@@ -1,4 +1,4 @@
-package siva.borie.Businesses.fragments;
+package siva.borie.business.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,10 +26,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import siva.borie.Businesses.Business;
-import siva.borie.Businesses.BusinessUtils;
-import siva.borie.Businesses.fragments.adapter.RecommendedLitViewAdapter;
 import siva.borie.R;
+import siva.borie.business.Business;
+import siva.borie.business.BusinessUtils;
+import siva.borie.business.adapter.RecommendedLitViewAdapter;
 import siva.borie.location.geofence.GeonfenceController;
 
 /**
@@ -77,17 +77,11 @@ public class RecommendedServiceFragment extends Fragment
     {
         Log.i(TAG, "onCreateView");
 
-        View root = inflater.inflate(R.layout.fragment_recommended_service, container,false );
+        View root = inflater.inflate (
+                R.layout.fragment_recommended_service, container,false );
 
-
-        /*
-        mListView = (ListView) root.findViewById(R.id.recommended_service_recylerview);
-        mAdapter = new ListViewAdapter(getActivity(), -1);
-        mListView.setAdapter(mAdapter);
-        setListRequest();
-        */
-
-        mRecylerView = (RecyclerView) root.findViewById(R.id.recommended_service_recylerview);
+        mRecylerView = (RecyclerView)
+                root.findViewById(R.id.recommended_service_recylerview);
         mLayoutManager = new LinearLayoutManager(getActivity()) ;
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecylerView.setLayoutManager(mLayoutManager);
@@ -220,30 +214,32 @@ public class RecommendedServiceFragment extends Fragment
         }
 
         @Override
-        public android.view.View getView(int position, android.view.View convertView, ViewGroup parent)
+        public android.view.View getView(final int position, final android.view.View convertView, ViewGroup parent)
         {
             ViewHolder viewHolder;
 
-            if(null == convertView)
+            View rowView= convertView;
+
+            if(null == rowView)
             {
-                convertView = View.inflate(getActivity(),R.layout.listview_item_biz, null);
+                rowView = View.inflate(getActivity(),R.layout.listview_item_biz, null);
 
                 viewHolder = new ViewHolder();
                 viewHolder.name = (TextView) convertView.findViewById(R.id.tv_list_item_biz_name);
                 viewHolder.address = (TextView)
                         convertView.findViewById(R.id.tv_list_item_biz_address);
 
-                convertView.setTag(viewHolder);
+                rowView.setTag(viewHolder);
             }
             else
             {
-                viewHolder = (ViewHolder)convertView.getTag();
+                viewHolder = (ViewHolder)rowView.getTag();
             }
 
             viewHolder.name.setText(mBusinessArrayList.get(position).getmName());
             viewHolder.address.setText(mBusinessArrayList.get(position).getmAddress());
 
-            return convertView;
+            return rowView;
         }
     }
 

@@ -4,9 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import siva.borie.service.fragment.AllServiceListFragment;
-import siva.borie.service.fragment.RecommendedServiceFragment;
-import siva.borie.service.fragment.VisitedServiceFragment;
+import siva.borie.business.fragment.AllServiceListFragment;
+import siva.borie.business.fragment.RecommendedServiceFragment;
+import siva.borie.business.fragment.VisitedServiceFragment;
+
 
 /**
  * Created by Eungjun on 2015-02-16.

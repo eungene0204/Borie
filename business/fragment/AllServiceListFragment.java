@@ -1,4 +1,4 @@
-package siva.borie.service.fragment;
+package siva.borie.business.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,13 +12,14 @@ import siva.borie.R;
 /**
  * Created by Eungjun on 2015-02-16.
  */
-public class VisitedServiceFragment extends Fragment
+public class AllServiceListFragment extends Fragment
 {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.fragment_visited_service, container, false);
+        View root = inflater.inflate(R.layout.fragment_all_service_list, container, false);
 
         return root;
     }
+
 }

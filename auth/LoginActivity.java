@@ -38,6 +38,8 @@ public class LoginActivity extends ActionBarActivity implements
         mFacebookHelper.init(button);
         mFacebookHelper.setFacebookCallBackListener(this);
 
+        mFacebookHelper.printFacebookHashKey(this);
+
         //For test
         if(mFacebookHelper.isTracking())
         {

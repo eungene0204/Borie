@@ -13,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import siva.borie.R;
 import siva.borie.facebook.FacebookUser;
@@ -60,54 +59,9 @@ public class NavigationDrawer
     private void initAdapter()
     {
         Log.i(TAG,"init");
-        List<NavDrawerItem> itemList = new ArrayList<NavDrawerItem>();
 
-        //Add User info item
-        NavDrawerItem userInfo = new NavDrawerItem(ItemId.USER_INFO);
-        userInfo.setTitle("USER");
-        itemList.add(userInfo);
-
-        //Add Title
-        NavDrawerItem serviceTitle = new NavDrawerItem(ItemId.SUB_HEADER);
-        serviceTitle.setTitle("Services");
-        itemList.add(serviceTitle);
-
-        //Add location based recommended service
-        NavDrawerItem lbsServicve = new NavDrawerItem( ItemId.LBS_SERVICE);
-        lbsServicve.setTitle("LBS");
-        itemList.add(lbsServicve) ;
-
-        //Add All Service
-        NavDrawerItem allService = new NavDrawerItem(ItemId.ALL_SERVICE);
-        allService.setTitle("All Service");
-        itemList.add(allService);
-
-        //Add Visited Service
-        NavDrawerItem visitedService = new NavDrawerItem(ItemId.VISITED_SERVICE);
-        visitedService.setTitle("Visited Service");
-        itemList.add(visitedService);
-
-        //Add Tool Title
-        NavDrawerItem toolTitle= new NavDrawerItem(ItemId.SUB_HEADER);
-        toolTitle.setTitle("Tools");
-        itemList.add(toolTitle);
-
-        //Add Setting
-        NavDrawerItem setting = new NavDrawerItem(ItemId.SETTING);
-        setting.setTitle("Setting");
-        itemList.add(setting);
-
-        //Add FeedBack
-        NavDrawerItem feedBack = new NavDrawerItem(ItemId.FEED_BACK);
-        feedBack.setTitle("Feedback");
-        itemList.add(feedBack);
-
-        //Add Share
-        NavDrawerItem share = new NavDrawerItem(ItemId.SHARE);
-        share.setTitle("Share");
-        itemList.add(share);
-
-        mAdapter = new NavigationDrawerAdapter((ArrayList<NavDrawerItem>) itemList,
+        mAdapter = new NavigationDrawerAdapter((ArrayList<NavDrawerItem>)
+                DrawerListManager.getInstance().getItemList(),
                 mActivity);
         mDrawerListView.setAdapter(mAdapter);
 

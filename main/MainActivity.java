@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private ViewPager mViewPager;
+
     private FacebookHelper mFacebookHelper;
     private FacebookUser mFacebookUser;
 

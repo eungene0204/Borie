@@ -11,9 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -24,12 +22,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import siva.borie.R;
 import siva.borie.business.Business;
 import siva.borie.business.BusinessUtils;
-import siva.borie.business.adapter.RecommendedLitViewAdapter;
+import siva.borie.business.adapter.RecommendedListViewAdapter;
+import siva.borie.business.listmanager.RecommendListManager;
 import siva.borie.location.geofence.GeonfenceController;
 
 /**
@@ -41,34 +38,17 @@ public class RecommendedServiceFragment extends Fragment
     private final String URL = "http://192.168.0.1:8080/biz/recommendlist";
 
     private ListView mListView;
-    private ListViewAdapter mAdapter;
-    private ArrayList<Business> mBusinessArrayList;
     private GeonfenceController mGeofenceController;
 
     private RecyclerView mRecylerView;
     private LinearLayoutManager mLayoutManager;
-    private RecommendedLitViewAdapter mRVAdapter;
+    private RecommendedListViewAdapter mAdapter;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
-        initDataSet();
-    }
-
-    private void initDataSet()
-    {
-        mBusinessArrayList = new ArrayList<Business>();
-
-        Business item1 = new Business();
-        item1.setmName("test1");
-        mBusinessArrayList.add(item1);
-
-        Business item2 = new Business();
-        item2.setmName("test2");
-        mBusinessArrayList.add(item2);
 
     }
 
@@ -82,14 +62,37 @@ public class RecommendedServiceFragment extends Fragment
 
         mRecylerView = (RecyclerView)
                 root.findViewById(R.id.recommended_service_recylerview);
+        mRecylerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity()) ;
         mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecylerView.setLayoutManager(mLayoutManager);
 
-        mRVAdapter = new RecommendedLitViewAdapter(mBusinessArrayList);
-        mRecylerView.setAdapter(mRVAdapter);
+        updateUI();
 
         return root;
+    }
+
+    private void updateUI()
+    {
+        RecommendListManager mng = RecommendListManager.getInstance();
+
+        if(null == mAdapter)
+        {
+            mAdapter = new RecommendedListViewAdapter(mng.getBusinessList());
+            mRecylerView.setAdapter(mAdapter);
+        }
+        else
+        {
+            mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        updateUI();
     }
 
     @Override
@@ -135,7 +138,7 @@ public class RecommendedServiceFragment extends Fragment
                 Log.d(TAG, "json result: " + jsonArray.toString());
 
                 getResponse(jsonArray);
-                mAdapter.notifyDataSetChanged();
+                //mAdapter.notifyDataSetChanged();
 
             }
         }, new Response.ErrorListener()
@@ -166,81 +169,17 @@ public class RecommendedServiceFragment extends Fragment
            {
                JSONObject json = (JSONObject) jsonArray.get(i);
 
-               biz.setmName(json.getString(BusinessUtils.BIZ_NAME));
-               biz.setmAddress(json.getString(BusinessUtils.BIZ_ADDRESS));
-               biz.setmEmail(json.getString(BusinessUtils.OWNER_EMAIL));
+               biz.setName(json.getString(BusinessUtils.BIZ_NAME));
+               biz.setAddress(json.getString(BusinessUtils.BIZ_ADDRESS));
+               biz.setEmail(json.getString(BusinessUtils.OWNER_EMAIL));
 
-               mBusinessArrayList.add(biz);
+               //mBusinessArrayList.add(biz);
 
            } catch (JSONException e)
            {
                Log.d(TAG, e.toString());
            }
        }
-    }
-
-    private static class ViewHolder
-    {
-        public TextView name;
-        public TextView address;
-
-    }
-
-    private class ListViewAdapter extends ArrayAdapter
-    {
-
-        public ListViewAdapter(Context context, int resource)
-        {
-            super(context, resource);
-
-        }
-
-        @Override
-        public int getCount()
-        {
-            return mBusinessArrayList.size();
-        }
-
-        @Override
-        public Object getItem(int position)
-        {
-            return mBusinessArrayList.get(position);
-        }
-
-        @Override
-        public long getItemId(int position)
-        {
-            return position;
-        }
-
-        @Override
-        public android.view.View getView(final int position, final android.view.View convertView, ViewGroup parent)
-        {
-            ViewHolder viewHolder;
-
-            View rowView= convertView;
-
-            if(null == rowView)
-            {
-                rowView = View.inflate(getActivity(),R.layout.listview_item_biz, null);
-
-                viewHolder = new ViewHolder();
-                viewHolder.name = (TextView) convertView.findViewById(R.id.tv_list_item_biz_name);
-                viewHolder.address = (TextView)
-                        convertView.findViewById(R.id.tv_list_item_biz_address);
-
-                rowView.setTag(viewHolder);
-            }
-            else
-            {
-                viewHolder = (ViewHolder)rowView.getTag();
-            }
-
-            viewHolder.name.setText(mBusinessArrayList.get(position).getmName());
-            viewHolder.address.setText(mBusinessArrayList.get(position).getmAddress());
-
-            return rowView;
-        }
     }
 
 }

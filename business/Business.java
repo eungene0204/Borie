@@ -9,35 +9,35 @@ public class Business
     private String mAddress;
     private String mEmail;
 
-    public String getmName()
+    public String getName()
     {
         return mName;
+
     }
 
-    public void setmName(final String mName)
+    public void setName(String name)
     {
-        this.mName = mName;
+        mName = name;
     }
 
-    public void setmAddress(final String mAddress)
+    public String getAddress()
     {
-        this.mAddress = mAddress;
+        return mAddress;
     }
 
-    public String getmEmail()
+    public void setAddress(String address)
+    {
+        mAddress = address;
+    }
+
+    public String getEmail()
     {
         return mEmail;
     }
 
-    public void setmEmail(final String mEmail)
+    public void setEmail(String email)
     {
-        this.mEmail = mEmail;
-
+        mEmail = email;
     }
 
-    public String getmAddress()
-    {
-
-        return mAddress;
-    }
 }
